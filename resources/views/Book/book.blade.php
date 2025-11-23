@@ -12,9 +12,19 @@
             <x-UI_components.go_back />
         </h2>
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <a href="{{ route('bookUser.edit', $book, $bookUser) }}">
+            <a href="{{ route('bookUser.edit', $bookUser->id) }}">
                 <div>Editar libro</div>
             </a>
+        </h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            <form action="{{ route('bookUser.destroy', $bookUser) }}" method="POST"  onsubmit="return confirm('¿Seguro que quieres eliminar este libro?')">
+                @csrf
+                @method('DELETE')
+
+                <button type="submit">
+                    Borrar libro
+                </button>
+            </form>
         </h2>
     </x-slot>
 

@@ -44,21 +44,22 @@ class BookUserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(BookUser $bookUser)
     {
-        $book = Book::find($id);
-        $bookUser = BookUser::find($id);
-        // return [$book, $bookUser];
+        // return $bookUser;
+        $book = Book::find($bookUser->book->id);
+        $bookUser = BookUser::find($bookUser->id);
+        //return [$book, $bookUser];
         return view('book.book', ['book' => $book, 'bookUser' => $bookUser]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Book $book, BookUser $bookUser)
+    public function edit(BookUser $bookUser)
     {
         // return $bookUser;
-        return view('Book.bookUser_edit', ['book' => $book, 'bookUser' => $bookUser]);
+        return view('Book.bookUser_edit', ['book' => $bookUser->book, 'bookUser' => $bookUser]);
     }
 
     /**
@@ -66,15 +67,13 @@ class BookUserController extends Controller
      */
     public function update(Request $request, BookUser $bookUser)
     {
-        
-        $book = Book::find($bookUser->id);
-        // return $book;
+        // return $bookUser;
         // return $request;
         $bookUser->update([
             'comment'   => $request->comment,
             'state'     => $request->state,
         ]);
-        return view('book.book', ['book' => $book, 'bookUser' => $bookUser]);
+        return view('book.book', ['book' => $bookUser->book, 'bookUser' => $bookUser]);
     }
 
     /**
@@ -82,6 +81,11 @@ class BookUserController extends Controller
      */
     public function destroy(BookUser $bookUser)
     {
-        //
+        //return $bookUser;
+        $bookUser->delete();
+
+        return redirect()->route('dashboard')
+        ->with('success', 'Libro eliminado correctamente de tu biblioteca.');
     }
+
 }
