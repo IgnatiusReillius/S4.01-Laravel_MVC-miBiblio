@@ -45,4 +45,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+<<<<<<< Updated upstream
+=======
+
+    public function books() : BelongsToMany
+    {
+        return $this->belongsToMany(Book::class);
+    }
+
+    public function bookUser() {
+        return $this->hasMany(BookUser::class);
+    }
+>>>>>>> Stashed changes
 }

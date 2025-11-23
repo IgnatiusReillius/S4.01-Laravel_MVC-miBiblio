@@ -1,8 +1,8 @@
-@props(['bookUser'])
+@props(['user'])
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Añadir libro') }}
         </h2>
     </x-slot>
 
@@ -10,22 +10,24 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @foreach ($booksUser as $bookUser)
-                        <a href="{{ route('bookUser.show', $bookUser->id) }}">
-                            <div class="font-bold">{{ $bookUser->book->title }}</div>
-                        </a>
+                    Selecciona el libro que quieres añadir:
+                    @foreach ($books as $book)
+                        {{-- <a href="{{ route('book.show', $book) }}"> --}}
+                            <div> {{ $book->title }} </div>
+                        {{-- </a> --}}
                     @endforeach
                 </div>
             </div>
         </div>
     </div>
+    {{-- <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <x-UI_components.search_bar />
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <a href="{{ route('bookUser.create') }}">
-                        <div>añadir libro</div>
-                    </a>
+                    Añadir libro
                 </div>
             </div>
         </div>
+    </div> --}}
 </x-app-layout>

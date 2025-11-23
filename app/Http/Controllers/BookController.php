@@ -9,7 +9,13 @@ class BookController extends Controller
 {
     // Display the specified resource.
     public function show($id) {
-        $book = Book::find($id);
-        return view('book.book', compact('book'));
+    }
+
+    public function create() {
+    }
+
+    public function add($id) {
+        $addBook = Book::find($id);
+
     }
 }
