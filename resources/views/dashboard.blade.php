@@ -12,9 +12,9 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     {{-- {{ __("You're logged in!") }} --}}
                     @foreach ($user->books as $book)
-                        <div>
-                            {{ $book->title }}
-                        </div>
+                        <a href="{{ route('book.show', $book) }}">
+                            <div> {{ $book->title }} </div>
+                        </a>
                     @endforeach
                 </div>
             </div>
