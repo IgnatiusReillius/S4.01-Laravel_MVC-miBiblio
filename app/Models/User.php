@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -45,8 +46,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-<<<<<<< Updated upstream
-=======
 
     public function books() : BelongsToMany
     {
@@ -56,5 +55,4 @@ class User extends Authenticatable
     public function bookUser() {
         return $this->hasMany(BookUser::class);
     }
->>>>>>> Stashed changes
 }

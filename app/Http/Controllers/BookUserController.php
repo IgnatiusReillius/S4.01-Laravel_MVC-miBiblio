@@ -22,7 +22,7 @@ class BookUserController extends Controller
     public function create()
     {
         $books = Book::all();
-        return view('book.add_book', compact('books'));
+        return view('book.book_add', compact('books'));
     }
 
     /**
@@ -30,7 +30,15 @@ class BookUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return $request;
+        $bookUser = BookUser::create([
+            'user_id' => auth()->id(),
+            'book_id' => $request->book_id,
+            'add_date' => now(),
+        ]);
+
+        return redirect()->route('dashboard');
+            // ->with('success', 'Libro añadido correctamente');
     }
 
     /**

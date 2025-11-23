@@ -1,4 +1,4 @@
-@props(['user'])
+{{-- @props(['user']) --}}
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -11,10 +11,17 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     Selecciona el libro que quieres añadir:
+                    
                     @foreach ($books as $book)
-                        {{-- <a href="{{ route('book.show', $book) }}"> --}}
-                            <div> {{ $book->title }} </div>
-                        {{-- </a> --}}
+                        <form action="{{ route('bookUser.store') }}" method="POST" style="margin-bottom:10px;">
+                            @csrf
+
+                            <input type="hidden" name="book_id" value="{{ $book->id }}">
+
+                            <button type="submit" class="book-select">
+                                {{ $book->title }}
+                            </button>
+                        </form>
                     @endforeach
                 </div>
             </div>
