@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\Auth;
 class DashboardController extends Controller
 {
     public function index() {
+        //return auth()->id();
         $booksUser = BookUser::with('book')
             ->where('user_id', Auth::user()->id)
             ->get();
-        // return $booksUser;
+        //printf($booksUser);
         return view('dashboard', compact('booksUser'));
     }
 }
