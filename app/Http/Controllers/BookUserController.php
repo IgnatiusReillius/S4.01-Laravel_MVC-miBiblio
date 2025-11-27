@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\BookUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookUserController extends Controller
 {
@@ -22,7 +23,9 @@ class BookUserController extends Controller
     public function create()
     {
         $books = Book::all();
-        return view('book.book_add', compact('books'));
+        $hasBook = BookUser::where('user_id', Auth::id())->get();
+        //return [$hasBook, $books];
+        return view('book.book_add', compact('books', 'hasBook'));
     }
 
     /**
@@ -35,6 +38,7 @@ class BookUserController extends Controller
             'user_id' => auth()->id(),
             'book_id' => $request->book_id,
             'add_date' => now(),
+            'property' => 0,
         ]);
 
         return redirect()->route('dashboard');
@@ -69,9 +73,16 @@ class BookUserController extends Controller
     {
         // return $bookUser;
         // return $request;
+        // $request->validate([
+        //     'rating' => ['nullable', 'integer', 'between:1,5'],
+        // ]);
         $bookUser->update([
+            'add_date' => $request->add_date,
+            'read_date' => $request->read_date,
             'comment'   => $request->comment,
             'state'     => $request->state,
+            'property'  => $request->boolean('property'),
+            'rating'    => $request->rating,
         ]);
         return view('book.book', ['book' => $bookUser->book, 'bookUser' => $bookUser]);
     }

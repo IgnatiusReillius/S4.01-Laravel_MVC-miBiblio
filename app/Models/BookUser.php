@@ -24,8 +24,10 @@ class BookUser extends Model
     ];
 
     protected $casts = [
+        'add_date' => 'date',
+        'read_date' => 'date',
         'state'     => BookUserState::class,
-        'property'  => BookUserProperty::class,
+        'rating' => 'integer',
     ];
 
     public function user() {

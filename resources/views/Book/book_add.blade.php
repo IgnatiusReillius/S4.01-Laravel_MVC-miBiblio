@@ -13,15 +13,19 @@
                     Selecciona el libro que quieres añadir:
                     
                     @foreach ($books as $book)
-                        <form action="{{ route('bookUser.store') }}" method="POST" style="margin-bottom:10px;">
-                            @csrf
+                        @if($hasBook->contains('book_id', $book->id))
+                            <div class="dark:text-gray-600">{{ $book->title }} - Ya lo tienes</div>
+                        @else
+                            <form action="{{ route('bookUser.store') }}" method="POST" style="margin-bottom:10px;">
+                                @csrf
 
-                            <input type="hidden" name="book_id" value="{{ $book->id }}">
+                                <input type="hidden" name="book_id" value="{{ $book->id }}">
 
-                            <button type="submit" class="book-select">
-                                {{ $book->title }}
-                            </button>
-                        </form>
+                                <button type="submit" class="book-select">
+                                    {{ $book->title }}
+                                </button>
+                            </form>
+                        @endif
                     @endforeach
                 </div>
             </div>
