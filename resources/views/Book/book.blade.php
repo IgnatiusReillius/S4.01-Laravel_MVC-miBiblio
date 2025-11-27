@@ -40,11 +40,36 @@
                     <div class="font-bold">Páginas: {{ $book->pages }}</div>
                     <div class="font-bold">ISBN: {{ $book->isbn }}</div>
                     <div class="font-bold">Sinopsis: {{ $book->summary }}</div>
-                    <div class="font-bold">Fecha de adición: {{ $bookUser->add_date }}</div>
-                    <div class="font-bold">Fecha de lectura: {{ $bookUser->read_date}}</div>
-                    <div class="font-bold">Notas: {{ $bookUser->comment }}</div>
-                    <div class="font-bold">Estado: {{ ucfirst($bookUser->state?->value) ?? 'Sin asignar'}}</div>
-                    <div class="font-bold">Mi puntuación: {{ $bookUser->property }}</div>
+                    <div class="font-bold">
+                        Fecha de adición:
+                        {{ $bookUser->add_date ? $bookUser->add_date->format('d/m/Y') : 'Sin leer' }}
+                    </div>
+                    <div class="font-bold">
+                        Fecha de lectura: 
+                        {{ $bookUser->read_date ? $bookUser->read_date->format('d/m/Y') : 'Sin leer' }}
+                    </div>
+                    <div class="font-bold">
+                        Notas: 
+                        {{ $bookUser->comment }}
+                    </div>
+                    <div class="font-bold">
+                        Condición: 
+                        {{ ucfirst($bookUser->state?->value) ?? 'Sin asignar'}}
+                    </div>
+                    <div class="font-bold">
+                        Disponibilidad: {{ $bookUser->property ? 'Lo tengo' : 'Lo deseo'}}
+                    </div>
+                    <div class="flex items-center">
+                        @for($i = 1; $i <= 5; $i++)
+                            <img 
+                                src="{{ $i <= $bookUser->rating 
+                                    ? asset('images/icon_star_full.svg') 
+                                    : asset('images/icon_star_empty.svg') }}"
+                                class="w-4 h-4"
+                            >
+                        @endfor
+                    </div>
+
                 </div>
             </div>
         </div>
