@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\BookUserProperty;
 use App\Enums\BookUserState;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,10 +23,11 @@ class BookUser extends Model
     ];
 
     protected $casts = [
+        'add_date' => 'date',
+        'read_date' => 'date',
         'state'     => BookUserState::class,
-        'property'  => BookUserProperty::class,
+        'rating' => 'integer',
     ];
-
     public function user() {
         return $this->belongsTo(User::class);
     }

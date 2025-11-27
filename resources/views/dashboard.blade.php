@@ -5,6 +5,22 @@
         </h2>
     </x-slot>
 
+    <div class="add-book fixed bottom-20 left-6 z-50">
+        <div class="add-book-view add-book-button active" style="display:block;">
+            <img 
+                data-view="add-book-button"
+                class="cursor-pointer toggle-add-book"
+                src="{{ asset('images/icon_add_book.svg') }}" />
+        </div>
+        <div class="add-book-view add-book-bg" style="display:none;">
+            <img 
+                data-view="add-book-bg"
+                class="cursor-pointer toggle-add-book"
+                src="{{ asset('images/icon_add_close.svg') }}" />
+            <x-book.books_search/>
+        </div>
+    </div>
+
     <div class="text-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
         <x-UI_components.booksViewSelectorBar />
     </div>
@@ -59,4 +75,75 @@
             }
         })
     })
+</script>
+
+<script>
+    var toggleButtons = document.querySelectorAll(".toggle-add-book");
+    var add_book_views = document.querySelectorAll(".add-book-view");
+    var add_book_button = document.querySelector(".add-book-button");
+    var add_book_bg = document.querySelector(".add-book-bg");
+
+    toggleButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
+            var view = button.getAttribute("data-view");
+
+            add_book_views.forEach(function(view) {
+                view.style.display = "none";
+            });
+
+            if(view === "add-book-button") {
+                add_book_bg.style.display = "block";
+            } else {
+                add_book_button.style.display = "block";
+            }
+        });
+    });
+</script>
+
+
+<script>
+    document.getElementById('searchBook').addEventListener('keyup', function () {
+        let query = this.value;
+
+        if (query.length < 3) {
+            document.getElementById('results').innerHTML = 'Introduce más de 2 letras para empezar a buscar.';
+            return;
+        }
+
+        fetch("{{ route('books.search') }}?fetchQuery=" + encodeURIComponent(query))
+            .then(response => response.json())
+            .then(data => {
+                let resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '';
+
+                if (data.books.length === 0) {
+                    resultsDiv.innerHTML = '<div>No se encontraron resultados</div>';
+                    return;
+                }
+
+                data.books.forEach(book => {
+
+                    const alreadyOwned = data.userBooks.includes(book.id);
+
+                    if (alreadyOwned) {
+                        resultsDiv.innerHTML += `
+                            <div class="text-gray-500">
+                                <strong>${book.title}</strong> - Ya lo tienes
+                            </div>
+                        `;
+                    } else {
+                        resultsDiv.innerHTML += `
+                            <form action="{{ route('bookUser.store') }}" method="POST" style="margin-bottom:10px;">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="book_id" value="${book.id}">
+
+                                <button type="submit" class="book-select">
+                                    ${book.title}
+                                </button>
+                            </form>
+                        `;
+                    }
+                });
+            });
+    });
 </script>

@@ -35,6 +35,7 @@ class BookUserController extends Controller
             'user_id' => auth()->id(),
             'book_id' => $request->book_id,
             'add_date' => now(),
+            'property' => 0,
         ]);
 
         return redirect()->route('dashboard');
