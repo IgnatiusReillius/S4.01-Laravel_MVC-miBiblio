@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\BookUserProperty;
 use App\Enums\BookUserState;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,7 +28,6 @@ class BookUser extends Model
         'state'     => BookUserState::class,
         'rating' => 'integer',
     ];
-
     public function user() {
         return $this->belongsTo(User::class);
     }
