@@ -9,7 +9,7 @@
             {{ $book->title }}
         </h2>
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <x-UI_components.go_back />
+            <x-UI_components.go_back :category="$bookUser->property == 1 ? 'owned' : 'wishlist'" />
         </h2>
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             <a href="{{ route('bookUser.edit', $bookUser->id) }}">

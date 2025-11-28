@@ -33,16 +33,20 @@ class BookUserController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'property' => 'required|boolean'
+        ]);
         // return $request;
         $bookUser = BookUser::create([
             'user_id' => auth()->id(),
             'book_id' => $request->book_id,
             'add_date' => now(),
-            'property' => 0,
+            'property' => $request->property ?? 0,
         ]);
 
-        return redirect()->route('dashboard');
-            // ->with('success', 'Libro añadido correctamente');
+        return redirect()->route('dashboard', [
+            'category' => $request->property == 1 ? 'owned' : 'wishlist'
+        ]);
     }
 
     /**

@@ -18,10 +18,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     Route::resource('/bookUser', BookUserController::class);
-
     Route::get('/books/search', [BookController::class, 'search'])->name('books.search');
 });
+
+Route::middleware('auth')->get('/books/search', [BookController::class, 'search'])
+     ->name('books.search');
 
 require __DIR__.'/auth.php';
