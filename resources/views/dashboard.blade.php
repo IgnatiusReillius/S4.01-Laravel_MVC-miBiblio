@@ -1,9 +1,46 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Tus libros') }}
-        </h2>
+
+        @if ( $category == 'owned')
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
+                Tus libros
+            </h2>
+            <form method="GET" action="{{ route('dashboard') }}" class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <input type="hidden" name="category" value="wishlist">
+                <button type="submit" class="book-select">
+                    Tus deseados
+                </button>
+            </form>
+        @else
+            <form method="GET" action="{{ route('dashboard') }}" class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <input type="hidden" name="category" value="owned">
+                <button type="submit" class="book-select">
+                    Tus libros
+                </button>
+            </form>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
+                Tus deseados
+            </h2>
+        @endif
     </x-slot>
+
+    <form method="GET" action="{{ route('dashboard') }}" class="mb-4">
+        <label class="text-white mr-2">Ordenar por:</label>
+
+        <select name="order" id="order" onchange="this.form.submit()" class="text-gray-900">
+            <option value="title_asc" @selected($order == 'title_asc')>Título A-Z</option>
+            <option value="title_desc" @selected($order == 'title_desc')>Título Z-A</option>
+
+            <option value="author_asc" @selected($order == 'author_asc')>Autor A-Z</option>
+            <option value="author_desc" @selected($order == 'author_desc')>Autor Z-A</option>
+
+            <option value="pages_asc" @selected($order == 'pages_asc')>Páginas ↑</option>
+            <option value="pages_desc" @selected($order == 'pages_desc')>Páginas ↓</option>
+
+            <option value="date_asc" @selected($order == 'date_asc')>Fecha ↑</option>
+            <option value="date_desc" @selected($order == 'date_desc')>Fecha ↓</option>
+        </select>
+    </form>
 
     <div class="add-book fixed bottom-20 left-6 z-50">
         <div class="add-book-view add-book-button active" style="display:block;">
@@ -29,14 +66,6 @@
         <x-book.booksViewDashboard :booksUser="$booksUser"/>
     </div>
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900 dark:text-gray-100">
-                <a href="{{ route('bookUser.create') }}"> Añadir libro
-                </a>
-            </div>
-        </div>
-    </div>
 
 </x-app-layout>
 
@@ -100,8 +129,9 @@
     });
 </script>
 
-
 <script>
+    const currentCategory = "{{ request('category', 'wishlist') }}";
+
     document.getElementById('searchBook').addEventListener('keyup', function () {
         let query = this.value;
 
@@ -132,10 +162,13 @@
                             </div>
                         `;
                     } else {
+                        const propertyValue = currentCategory === 'owned' ? 1 : 0;
+
                         resultsDiv.innerHTML += `
                             <form action="{{ route('bookUser.store') }}" method="POST" style="margin-bottom:10px;">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <input type="hidden" name="book_id" value="${book.id}">
+                                <input type="hidden" name="property" value="${propertyValue}">
 
                                 <button type="submit" class="book-select">
                                     ${book.title}

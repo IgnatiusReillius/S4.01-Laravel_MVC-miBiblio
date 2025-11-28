@@ -12,13 +12,15 @@ class BookController extends Controller
     {
         $query = $request->fetchQuery;
 
-        $userBookIds = BookUser::pluck('book_id');
+        $userBookIds = BookUser::where('user_id', auth()->id())
+                    ->pluck('book_id')
+                    ->toArray();
 
         $books = Book::where('title', 'like', "%{$query}%")
                     ->orWhere('author', 'like', "%{$query}%")
                     ->limit(10)
                     ->get();
-
+        
         return response()->json([
             'books' => $books,
             'userBooks' => $userBookIds
