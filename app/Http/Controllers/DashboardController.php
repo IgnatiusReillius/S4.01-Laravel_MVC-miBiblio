@@ -12,7 +12,40 @@ class DashboardController extends Controller
 
         $order = $request->get('order', 'title_asc');
         $category = $request->get('category', 'wishlist');
-        //return $category;
+
+        $booksUserBase = BookUser::with('book')
+            ->where('user_id', Auth::id())
+            ->where('property', $category === 'owned' ? 1 : 0);
+
+        $authors = $booksUserBase->clone()
+            ->join('books', 'book_user.book_id', '=', 'books.id')
+            ->select('books.author')
+            ->distinct()
+            ->pluck('books.author')
+            ->filter()
+            ->values();
+
+        $publishers = $booksUserBase->clone()
+            ->join('books', 'book_user.book_id', '=', 'books.id')
+            ->select('books.publisher')
+            ->distinct()
+            ->pluck('books.publisher')
+            ->filter()
+            ->values();
+
+        $ratings = $booksUserBase->clone()
+            ->select('book_user.rating')
+            ->distinct()
+            ->pluck('rating')
+            ->filter()
+            ->values();
+
+        $states = $booksUserBase->clone()
+            ->select('book_user.state')
+            ->distinct()
+            ->pluck('state')
+            ->filter()
+            ->values();
         
         switch ($category) {
             case 'wishlist':
@@ -59,10 +92,28 @@ class DashboardController extends Controller
                 $query->orderBy('books.title', 'asc');
         }
 
+        $selectedAuthor = $request->get('author');
+        if ($selectedAuthor) {
+            $query->where('books.author', $selectedAuthor);
+        }
+
+        $selectedPublisher = $request->get('publisher');
+        if ($selectedPublisher) {
+            $query->where('books.publisher', $selectedPublisher);
+        }
+
+        $selectedRating = $request->get('rating');
+        if ($selectedRating) {
+            $query->where('book_user.rating', $selectedRating);
+        }
+
+        $selectedState = $request->get('state');
+        if ($selectedState) {
+            $query->where('book_user.state', $selectedState);
+        }
+
         $booksUser = $query->select('book_user.*')->get();
 
-        //return $query;
-
-        return view('dashboard', compact('booksUser', 'order', 'category'));
+        return view('dashboard', compact('booksUser', 'order', 'category', 'authors', 'publishers', 'ratings', 'states'));
     }
 }
