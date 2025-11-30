@@ -1,78 +1,48 @@
-{{-- @extends('layouts.app') --}}
-
-{{-- @section('title', 'Mi biblioteca') --}}
-
-{{-- @section('content') --}}
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ $book->title }}
-        </h2>
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <x-UI_components.go_back :category="$bookUser->property == 1 ? 'owned' : 'wishlist'" />
-        </h2>
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <a href="{{ route('bookUser.edit', $bookUser->id) }}">
-                <div>Editar libro</div>
-            </a>
-        </h2>
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <form action="{{ route('bookUser.destroy', $bookUser) }}" method="POST"  onsubmit="return confirm('¿Seguro que quieres eliminar este libro?')">
-                @csrf
-                @method('DELETE')
+    <div class="h-screen w-screen inline-flex justify-start items-start overflow-hidden" >
 
-                <button type="submit">
-                    Borrar libro
-                </button>
-            </form>
-        </h2>
-    </x-slot>
+        {{-- cuerpo principal --}}
+        <div class="flex-1 self-stretch bg-stone-400 inline-flex flex-col justify-start items-start overflow-hidden">
 
-    <x-book.book_cover :bookUser="$bookUser"/>
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="font-bold">Titulo: {{ $book->title }}</div>
-                    <div class="font-bold">Autor: {{ $book->author }}</div>
-                    <div class="font-bold">Editorial: {{ $book->publisher }}</div>
-                    <div class="font-bold">Fecha de publicación: {{ $book->publish_date }}</div>
-                    <div class="font-bold">Páginas: {{ $book->pages }}</div>
-                    <div class="font-bold">ISBN: {{ $book->isbn }}</div>
-                    <div class="font-bold">Sinopsis: {{ $book->summary }}</div>
-                    <div class="font-bold">
-                        Fecha de adición:
-                        {{ $bookUser->add_date ? $bookUser->add_date->format('d/m/Y') : 'Sin leer' }}
-                    </div>
-                    <div class="font-bold">
-                        Fecha de lectura: 
-                        {{ $bookUser->read_date ? $bookUser->read_date->format('d/m/Y') : 'Sin leer' }}
-                    </div>
-                    <div class="font-bold">
-                        Notas: 
-                        {{ $bookUser->comment }}
-                    </div>
-                    <div class="font-bold">
-                        Condición: 
-                        {{ ucfirst($bookUser->state?->value) ?? 'Sin asignar'}}
-                    </div>
-                    <div class="font-bold">
-                        Disponibilidad: {{ $bookUser->property ? 'Lo tengo' : 'Lo deseo'}}
-                    </div>
-                    <div class="flex items-center">
-                        @for($i = 1; $i <= 5; $i++)
-                            <img 
-                                src="{{ $i <= $bookUser->rating 
+            {{-- barra superior --}}
+            <div class="self-stretch flex flex-row justify-between h-24 pl-7 pr-14 py-7 bg-gray-300">
+
+                {{-- volver atrás --}}
+                <x-UI_components.go_back/>
+
+                {{-- editar o borrar libro --}}
+                <div class="text-neutral-600 ">
+                    <x-book.book_delete_edit_icons :bookUser="$bookUser"/>
+                </div>
+            </div>
+
+            {{-- lista de libros --}}
+            <div class="self-stretch flex-1 px-7 pt-5 bg-gray-200">
+                <div class="flex flex-row">
+                    <x-book.book_cover :bookUser="$bookUser" size="giant"/>
+                    <div class="ml-3 ">
+                        <div class="mb-2"><span class="font-bold">Título:</span> {{ $bookUser->book->title }}</div>
+                        <div class="mb-2"><span class="font-bold">Autor:</span> {{ $bookUser->book->author }}</div>
+                        <div class="mb-2"><span class="font-bold">Editorial:</span> {{ $bookUser->book->publisher }}</div>
+                        <div class="mb-2"><span class="font-bold">Fecha de publicación:</span> {{ $bookUser->book->publish_date }}</div>
+                        <div class="mb-2"><span class="font-bold">Páginas:</span> {{ $bookUser->book->pages }}</div>
+                        <div class="mb-2"><span class="font-bold">ISBN-10:</span> {{ $bookUser->book->isbn }}</div>
+                        <div class="mb-2"><span class="font-bold">Sinopsis:</span> {{ $bookUser->book->summary }}</div>
+                        <div class="mb-2"><span class="font-bold">Fecha de adición:</span> {{ $bookUser->add_date ? $bookUser->add_date->format('d/m/Y') : 'Sin leer' }}</div>
+                        <div class="mb-2"><span class="font-bold">Fecha de lectura:</span> {{ $bookUser->read_date ? $bookUser->read_date->format('d/m/Y') : 'Sin leer' }}</div>
+                        <div class="mb-2"><span class="font-bold">Notas:</span> {{ $bookUser->comment }}</div>
+                        <div class="mb-2"><span class="font-bold">Condición:</span> {{ ucfirst($bookUser->state?->value) ?? 'Sin asignar'}}</div>
+                        <div class="mb-2"><span class="font-bold">Disponibilidad:</span> {{ $bookUser->property ? 'Lo tengo' : 'Lo deseo'}}</div>
+                        <div class="mb-2"><span class="font-bold">Puntuación:</span>  
+                            @for($i = 1; $i <= 5; $i++)
+                                <img src="{{ $i <= $bookUser->rating 
                                     ? asset('images/icon_star_full.svg') 
                                     : asset('images/icon_star_empty.svg') }}"
-                                class="w-4 h-4"
-                            >
-                        @endfor
+                                    class="w-4 h-4">
+                            @endfor</div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </x-app-layout>
-<body class="h-screen m-0">

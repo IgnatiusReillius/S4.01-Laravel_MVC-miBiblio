@@ -1,69 +1,44 @@
 <x-app-layout>
-    <x-slot name="header">
+<x-book.book_add/>
+    <div class="h-screen w-screen inline-flex justify-start items-start overflow-hidden" >
 
-        @if ( $category == 'owned')
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
-                Tus libros
-            </h2>
-            <form method="GET" action="{{ route('dashboard') }}" class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                <input type="hidden" name="category" value="wishlist">
-                <button type="submit" class="book-select">
-                    Tus deseados
-                </button>
-            </form>
-        @else
-            <form method="GET" action="{{ route('dashboard') }}" class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                <input type="hidden" name="category" value="owned">
-                <button type="submit" class="book-select">
-                    Tus libros
-                </button>
-            </form>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-400 leading-tight">
-                Tus deseados
-            </h2>
-        @endif
-    </x-slot>
+        {{-- barra lateral --}}
+        <div class="w-72 self-stretch p-7 bg-gray-100">
 
-    <form method="GET" action="{{ route('dashboard') }}" class="mb-4">
-        <label class="text-white mr-2">Ordenar por:</label>
+            {{-- tus libros o deseados  --}}
+            <div class="flex-col mb-10">
+                <x-UI_components.owned-wish_selector :category="$category"/>
+            </div>
 
-        <select name="order" id="order" onchange="this.form.submit()" class="text-gray-900">
-            <option value="title_asc" @selected($order == 'title_asc')>Título A-Z</option>
-            <option value="title_desc" @selected($order == 'title_desc')>Título Z-A</option>
-
-            <option value="author_asc" @selected($order == 'author_asc')>Autor A-Z</option>
-            <option value="author_desc" @selected($order == 'author_desc')>Autor Z-A</option>
-
-            <option value="pages_asc" @selected($order == 'pages_asc')>Páginas ↑</option>
-            <option value="pages_desc" @selected($order == 'pages_desc')>Páginas ↓</option>
-
-            <option value="date_asc" @selected($order == 'date_asc')>Fecha ↑</option>
-            <option value="date_desc" @selected($order == 'date_desc')>Fecha ↓</option>
-        </select>
-    </form>
-
-    <div class="add-book fixed bottom-20 left-6 z-50">
-        <div class="add-book-view add-book-button active" style="display:block;">
-            <img 
-                data-view="add-book-button"
-                class="cursor-pointer toggle-add-book"
-                src="{{ asset('images/icon_add_book.svg') }}" />
+            {{-- filtros --}}
+            <div class="flex-col">
+                <x-UI_components.booksFilter :authors="$authors" :publishers="$publishers" :ratings="$ratings" :states="$states" :category="$category" :order="$order"/>
+            </div>
         </div>
-        <div class="add-book-view add-book-bg" style="display:none;">
-            <img 
-                data-view="add-book-bg"
-                class="cursor-pointer toggle-add-book"
-                src="{{ asset('images/icon_add_close.svg') }}" />
-            <x-book.books_search/>
+
+        {{-- cuerpo principal --}}
+        <div class="flex-1 self-stretch  inline-flex flex-col justify-start items-start overflow-hidden">
+
+            {{-- barra superior --}}
+            <div class="self-stretch flex flex-row justify-between h-24 pl-7 pr-14 py-7 bg-gray-300">
+
+                {{-- ordenar por --}}
+                <x-UI_components.bookOrder :order="$order" :category="$category"/>
+
+                {{-- selector de vista de libros --}}
+                <div class="text-neutral-600 ">
+                    <x-UI_components.booksViewSelectorBar />
+                </div>
+
+                @include('layouts.navigation')
+
+            </div>
+
+            {{-- lista de libros --}}
+            <div class="self-stretch flex-1 px-7 pt-5 bg-gray-200 min-h-0 overflow-y-auto">
+                <x-book.booksViewDashboard :booksUser="$booksUser"/>
+            </div>
         </div>
-    </div>
-
-    <div class="text-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-        <x-UI_components.booksViewSelectorBar />
-    </div>
-
-    <div class="py-12 dark:text-gray-100">
-        <x-book.booksViewDashboard :booksUser="$booksUser"/>
     </div>
 
 
@@ -91,13 +66,13 @@
             })
     
             if(li_view == "list-view") {
-                list_view.style.display = "block";
+                list_view.style.display = "flex";
             }
             else if(li_view == "list-detailed-view") {
-                list_detailed_view.style.display = "block";
+                list_detailed_view.style.display = "flex";
             }
             else if(li_view == "grid-small-view") {
-                grid_small_view.style.display = "block"; 
+                grid_small_view.style.display = "flex"; 
             }
             else {
                 grid_big_view.style.display = "flex";
@@ -157,21 +132,28 @@
 
                     if (alreadyOwned) {
                         resultsDiv.innerHTML += `
-                            <div class="text-gray-500">
-                                <strong>${book.title}</strong> - Ya lo tienes
+                            <div class="flex flex-row">
+                                <div class="flex flex-col opacity-50">
+                                    <strong>${book.title}</strong> 
+                                    <span class="text-sm">${book.author}</span>
+                                </div>
+                                <div class="flex items-center"> - Ya está en tu biblioteca</div>
                             </div>
                         `;
                     } else {
                         const propertyValue = currentCategory === 'owned' ? 1 : 0;
 
                         resultsDiv.innerHTML += `
-                            <form action="{{ route('bookUser.store') }}" method="POST" style="margin-bottom:10px;">
+                            <form action="{{ route('bookUser.store') }}" method="POST">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <input type="hidden" name="book_id" value="${book.id}">
                                 <input type="hidden" name="property" value="${propertyValue}">
 
-                                <button type="submit" class="book-select">
-                                    ${book.title}
+                                <button type="submit" class="book-select text-left">
+                                    <div class="flex flex-col">
+                                        <strong>${book.title}</strong> 
+                                        <span class="text-sm">${book.author}</span>
+                                    </div>
                                 </button>
                             </form>
                         `;
