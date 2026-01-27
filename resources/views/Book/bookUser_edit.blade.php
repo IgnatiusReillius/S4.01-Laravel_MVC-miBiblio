@@ -1,22 +1,17 @@
 <x-app-layout>
     <div class="h-screen w-screen inline-flex justify-start items-start overflow-hidden" >
 
-        {{-- cuerpo principal --}}
         <div class="flex-1 self-stretch bg-stone-400 inline-flex flex-col justify-start items-start overflow-hidden">
 
-            {{-- barra superior --}}
             <div class="self-stretch flex flex-row justify-between h-24 pl-7 pr-14 py-7 bg-gray-300">
 
-                {{-- volver atrás --}}
                 <x-UI_components.go_back/>
 
-                {{-- editar o borrar libro --}}
                 <div class="text-neutral-600 ">
                     <x-book.book_delete_edit_icons :bookUser="$bookUser"/>
                 </div>
             </div>
 
-            {{-- lista de libros --}}
             <div class="self-stretch flex-1 px-7 pt-5 bg-gray-200">
                 <div class="flex flex-row">
                     <x-book.book_cover :bookUser="$bookUser" size="giant"/>
@@ -32,7 +27,6 @@
                             @csrf
                             @method('PUT')
 
-                            {{-- Fecha de adición --}}
                             <div>
                                 <label for="add_date" class="font-bold">Fecha de adición:</label>
                                 <input 
@@ -45,7 +39,6 @@
                                 >
                             </div>
 
-                            {{-- Fecha de lectura --}}
                             <div>
                                 <label for="read_date" class="font-bold">Fecha de lectura:</label>
                                 <input 
@@ -58,13 +51,11 @@
                                 >
                             </div>
                             
-                            {{-- Notas --}}
                             <div>
                                 <label for="comment" class="font-bold">Notas:</label>
                                 <input type="text" name="comment" value="{{ $bookUser->comment }}" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-gray-900 "> 
                             </div>
 
-                            {{-- Condición --}}
                             <div>
                                 <label for="state" class="font-bold">Condición:</label>
                                 <select name="state" class="text-gray-900">
@@ -76,7 +67,6 @@
                                 </select> 
                             </div>
 
-                            {{-- Disponibilidad --}}
                             <div>
                                 <label for="property" class="font-bold">Disponibilidad:</label>
                                 <select name="property" id="property" class="text-gray-900">
@@ -89,7 +79,6 @@
                                 </select>
                             </div>
 
-                            {{-- Puntuación --}}
                             <div class="mt-4">
                                 <label class="font-bold">Mi puntuación</label>
                                 <div class="flex items-center space-x-1 star-rating" data-current="{{ old('rating', $bookUser->rating ?? 0) }}">
@@ -106,7 +95,6 @@
                                 </div>
                             </div>
 
-                            {{-- Botón de guardado --}}
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"> 
                                 Save
                             </button>

@@ -66,7 +66,7 @@ DB_PASSWORD=
 
 This will rebuild your database and load initial data:
 ```
-php artisan migrate:fresh --seed
+php artisan migrate --seed
 ```
 
 ## Start the Development Servers

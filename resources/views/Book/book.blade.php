@@ -1,22 +1,17 @@
 <x-app-layout>
     <div class="h-screen w-screen inline-flex justify-start items-start overflow-hidden" >
 
-        {{-- cuerpo principal --}}
         <div class="flex-1 self-stretch bg-stone-400 inline-flex flex-col justify-start items-start overflow-hidden">
 
-            {{-- barra superior --}}
             <div class="self-stretch flex flex-row justify-between h-24 pl-7 pr-14 py-7 bg-gray-300">
 
-                {{-- volver atrás --}}
                 <x-UI_components.go_back/>
 
-                {{-- editar o borrar libro --}}
                 <div class="text-neutral-600 ">
                     <x-book.book_delete_edit_icons :bookUser="$bookUser"/>
                 </div>
             </div>
 
-            {{-- lista de libros --}}
             <div class="self-stretch flex-1 px-7 pt-5 bg-gray-200">
                 <div class="flex flex-row">
                     <x-book.book_cover :bookUser="$bookUser" size="giant"/>
