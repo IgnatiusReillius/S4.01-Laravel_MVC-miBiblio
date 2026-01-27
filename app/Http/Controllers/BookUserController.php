@@ -24,7 +24,7 @@ class BookUserController extends Controller
     {
         $books = Book::all();
         $hasBook = BookUser::where('user_id', Auth::id())->get();
-        //return [$hasBook, $books];
+        
         return view('book.book_add', compact('books', 'hasBook'));
     }
 
@@ -36,7 +36,7 @@ class BookUserController extends Controller
         $request->validate([
             'property' => 'required|boolean'
         ]);
-        // return $request;
+        
         $bookUser = BookUser::create([
             'user_id' => auth()->id(),
             'book_id' => $request->book_id,
@@ -54,10 +54,10 @@ class BookUserController extends Controller
      */
     public function show(BookUser $bookUser)
     {
-        // return $bookUser;
+        
         $book = Book::find($bookUser->book->id);
         $bookUser = BookUser::find($bookUser->id);
-        //return [$book, $bookUser];
+        
         return view('book.book', ['book' => $book, 'bookUser' => $bookUser]);
     }
 
@@ -66,7 +66,7 @@ class BookUserController extends Controller
      */
     public function edit(BookUser $bookUser)
     {
-        // return $bookUser;
+        
         return view('Book.bookUser_edit', ['book' => $bookUser->book, 'bookUser' => $bookUser]);
     }
 
@@ -75,11 +75,6 @@ class BookUserController extends Controller
      */
     public function update(Request $request, BookUser $bookUser)
     {
-        // return $bookUser;
-        // return $request;
-        // $request->validate([
-        //     'rating' => ['nullable', 'integer', 'between:1,5'],
-        // ]);
         $bookUser->update([
             'add_date' => $request->add_date,
             'read_date' => $request->read_date,
@@ -96,7 +91,6 @@ class BookUserController extends Controller
      */
     public function destroy(BookUser $bookUser)
     {
-        //return $bookUser;
         $bookUser->delete();
 
         return redirect()->route('dashboard')

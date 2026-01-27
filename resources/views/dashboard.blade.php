@@ -1,32 +1,24 @@
 <x-app-layout>
-<<<<<<< HEAD
 <x-book.book_add/>
     <div class="h-screen w-screen inline-flex justify-start items-start overflow-hidden" >
 
-        {{-- barra lateral --}}
         <div class="w-72 self-stretch p-7 bg-gray-100">
 
-            {{-- tus libros o deseados  --}}
             <div class="flex-col mb-10">
                 <x-UI_components.owned-wish_selector :category="$category"/>
             </div>
 
-            {{-- filtros --}}
             <div class="flex-col">
                 <x-UI_components.booksFilter :authors="$authors" :publishers="$publishers" :ratings="$ratings" :states="$states" :category="$category" :order="$order"/>
             </div>
         </div>
 
-        {{-- cuerpo principal --}}
         <div class="flex-1 self-stretch  inline-flex flex-col justify-start items-start overflow-hidden">
 
-            {{-- barra superior --}}
             <div class="self-stretch flex flex-row justify-between h-24 pl-7 pr-14 py-7 bg-gray-300">
 
-                {{-- ordenar por --}}
                 <x-UI_components.bookOrder :order="$order" :category="$category"/>
 
-                {{-- selector de vista de libros --}}
                 <div class="text-neutral-600 ">
                     <x-UI_components.booksViewSelectorBar />
                 </div>
@@ -35,7 +27,6 @@
 
             </div>
 
-            {{-- lista de libros --}}
             <div class="self-stretch flex-1 px-7 pt-5 bg-gray-200 min-h-0 overflow-y-auto">
                 <x-book.booksViewDashboard :booksUser="$booksUser"/>
             </div>
@@ -163,21 +154,3 @@
             });
     });
 </script>
-=======
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
->>>>>>> aecd9aacf9f7f126cab430d21e4fb09891dfa80e

@@ -13,12 +13,6 @@ class BookUserSeeder extends Seeder
      */
     public function run()
     {
-        /**
-         * Command :
-         * artisan seed:generate --table-mode --tables=books,book_user,users
-         *
-         */
-
         $dataTables = [
             [
                 'id' => 26,
