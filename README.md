@@ -85,6 +85,7 @@ With this URL, you will be able to access the application.
 Then, in a new terminal:
 
 ```
+cd S4.01-Laravel_MVC-miBiblio
 npm run dev
 ```
 
