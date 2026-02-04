@@ -1,5 +1,6 @@
+<x-book.buttons.book_search_button/>
+<x-book.buttons.book_create_button/>
 <x-app-layout>
-<x-book.book_add/>
     <div class="h-screen w-screen inline-flex justify-start items-start overflow-hidden" >
 
         <div class="w-72 self-stretch p-7 bg-gray-100">
@@ -74,25 +75,37 @@
 </script>
 
 <script>
-    var toggleButtons = document.querySelectorAll(".toggle-add-book");
-    var add_book_views = document.querySelectorAll(".add-book-view");
-    var add_book_button = document.querySelector(".add-book-button");
-    var add_book_bg = document.querySelector(".add-book-bg");
+    document.addEventListener("DOMContentLoaded", function () {
 
-    toggleButtons.forEach(function(button) {
-        button.addEventListener("click", function() {
-            var view = button.getAttribute("data-view");
+        const toggleButtons = document.querySelectorAll(".toggle-action-book");
+        const searchViews = document.querySelectorAll(".search-book-view");
+        const createViews = document.querySelectorAll(".create-book-view");
 
-            add_book_views.forEach(function(view) {
-                view.style.display = "none";
+        function hideAll() {
+            searchViews.forEach(v => v.style.display = "none");
+            createViews.forEach(v => v.style.display = "none");
+        }
+
+        toggleButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const view = this.dataset.view;
+
+                hideAll();
+
+                if (view === "search") {
+                    searchViews.forEach(v => v.style.display = "block");
+                }
+
+                if (view === "create") {
+                    createViews.forEach(v => v.style.display = "block");
+                }
+
+                if (view === "close") {
+                    hideAll();
+                }
             });
-
-            if(view === "add-book-button") {
-                add_book_bg.style.display = "block";
-            } else {
-                add_book_button.style.display = "block";
-            }
         });
+
     });
 </script>
 
