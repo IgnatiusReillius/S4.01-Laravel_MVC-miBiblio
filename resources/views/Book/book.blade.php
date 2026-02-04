@@ -1,3 +1,6 @@
+<x-UI_components.message/>
+<x-bookUser.book_user_edit :bookUser="$bookUser"/>
+<x-bookUser.book_user_delete :bookUser="$bookUser"/>
 <x-app-layout>
     <div class="h-screen w-screen inline-flex justify-start items-start overflow-hidden" >
 
@@ -6,10 +9,6 @@
             <div class="self-stretch flex flex-row justify-between h-24 pl-7 pr-14 py-7 bg-gray-300">
 
                 <x-UI_components.go_back/>
-
-                <div class="text-neutral-600 ">
-                    <x-book.book_delete_edit_icons :bookUser="$bookUser"/>
-                </div>
             </div>
 
             <div class="self-stretch flex-1 px-7 pt-5 bg-gray-200">
