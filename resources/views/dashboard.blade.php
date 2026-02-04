@@ -1,3 +1,4 @@
+<x-UI_components.message/>
 <x-book.buttons.book_search_button/>
 <x-book.buttons.book_create_button/>
 <x-app-layout>
@@ -29,7 +30,7 @@
             </div>
 
             <div class="self-stretch flex-1 px-7 pt-5 bg-gray-200 min-h-0 overflow-y-auto">
-                <x-book.booksViewDashboard :booksUser="$booksUser"/>
+                <x-book.booksViewDashboard :books="$books" :booksUser="$booksUser" />
             </div>
         </div>
     </div>
@@ -75,38 +76,38 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-        const toggleButtons = document.querySelectorAll(".toggle-action-book");
-        const searchViews = document.querySelectorAll(".search-book-view");
-        const createViews = document.querySelectorAll(".create-book-view");
+    const toggleButtons = document.querySelectorAll(".toggle-action-book");
+    const searchViews = document.querySelectorAll(".search-book-view");
+    const createViews = document.querySelectorAll(".create-book-view");
 
-        function hideAll() {
-            searchViews.forEach(v => v.style.display = "none");
-            createViews.forEach(v => v.style.display = "none");
-        }
+    function hideAll() {
+        searchViews.forEach(v => v.style.display = "none");
+        createViews.forEach(v => v.style.display = "none");
+    }
 
-        toggleButtons.forEach(button => {
-            button.addEventListener("click", function () {
-                const view = this.dataset.view;
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const view = this.dataset.view;
 
+            hideAll();
+
+            if (view === "search") {
+                searchViews.forEach(v => v.style.display = "block");
+            }
+
+            if (view === "create") {
+                createViews.forEach(v => v.style.display = "block");
+            }
+
+            if (view === "close") {
                 hideAll();
-
-                if (view === "search") {
-                    searchViews.forEach(v => v.style.display = "block");
-                }
-
-                if (view === "create") {
-                    createViews.forEach(v => v.style.display = "block");
-                }
-
-                if (view === "close") {
-                    hideAll();
-                }
-            });
+            }
         });
-
     });
+
+});
 </script>
 
 <script>

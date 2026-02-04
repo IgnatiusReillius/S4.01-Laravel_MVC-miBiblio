@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+
     public function store(Request $request) {
         
         $request->validate([
@@ -49,7 +50,7 @@ class BookController extends Controller
         ])
             ->with('success', 'Libro creado correctamente en la base de datos.');
     }
-    
+
     public function search(Request $request)
     {
         $query = $request->fetchQuery;
@@ -75,47 +76,73 @@ class BookController extends Controller
     }
 
     public function update(Request $request, Book $book) {
-        
         $request->validate([
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'publisher' => 'nullable|string|max:255',
-            'publish_date' => 'nullable|date',
-            'pages' => 'nullable|integer|min:1',
-            'isbn' => 'required|string|max:20',
-            'summary' => 'nullable|string|max:1000',
-            'cover_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
-        ]);
+        'title' => 'required|string|max:255',
+        'author' => 'required|string|max:255',
+        'publisher' => 'nullable|string|max:255',
+        'publish_date' => 'nullable|date',
+        'pages' => 'nullable|integer|min:1',
+        'isbn' => 'required|string|max:20',
+        'summary' => 'nullable|string|max:1000',
+        'cover_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024', // Validación de imagen
+    ]);
 
-        $data = [
-            'title' => $request->title,
-            'author' => $request->author,
-            'publisher' => $request->publisher,
-            'publish_date' => $request->publish_date,
-            'pages' => $request->pages,
-            'isbn' => $request->isbn,
-            'summary' => $request->summary,
-        ];
+    // Preparar los datos a actualizar
+    $data = [
+        'title' => $request->title,
+        'author' => $request->author,
+        'publisher' => $request->publisher,
+        'publish_date' => $request->publish_date,
+        'pages' => $request->pages,
+        'isbn' => $request->isbn,
+        'summary' => $request->summary,
+    ];
 
-        if ($request->hasFile('cover_path')) {
-            if ($book->cover_path && file_exists(public_path($book->cover_path))) {
-                unlink(public_path($book->cover_path));
-            }
-
-            $file = $request->file('cover_path');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('images'), $filename);
-
-            $data['cover_path'] = 'images/' . $filename;
+    // Procesar la imagen si se subió una nueva
+    if ($request->hasFile('cover_path')) {
+        // Eliminar la imagen anterior si existe
+        if ($book->cover_path && file_exists(public_path($book->cover_path))) {
+            unlink(public_path($book->cover_path));
         }
 
-        $book->update($data);
+        // Subir la nueva imagen
+        $file = $request->file('cover_path');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('images'), $filename);
+        
+        // Añadir el path al array de datos
+        $data['cover_path'] = 'images/' . $filename;
+    }
 
-        $bookUser = $book->bookUser()
+    // Actualizar el libro
+    $book->update($data);
+
+    $bookUser = $book->bookUser()
+        ->where('user_id', auth()->id())
+        ->first();
+
+    return redirect()->route('bookUser.show', $bookUser)
+        ->with('success', 'Libro editado correctamente.');
+    }
+
+    public function destroy(Book $book) {
+
+        $otherUsersCount = $book->bookUser()
+                                ->where('user_id', '!=', auth()->id())
+                                ->count();
+        
+        if ($otherUsersCount > 0) {
+            return redirect()->route('dashboard')
+                ->with('error', 'No se puede eliminar este libro porque otros usuarios tienen reseñas del mismo.');
+        }
+        
+        $book->bookUser()
             ->where('user_id', auth()->id())
-            ->first();
-
-        return redirect()->route('bookUser.show', $bookUser)
-            ->with('success', 'Libro editado correctamente.');
+            ->delete();
+        
+        $book->delete();
+        
+        return redirect()->route('dashboard')
+            ->with('success', 'Libro eliminado correctamente de la base de datos.');
     }
 }

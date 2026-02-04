@@ -1,10 +1,7 @@
 <x-app-layout>
     <div class="h-screen w-screen inline-flex justify-start items-start overflow-hidden" >
-
         <div class="flex-1 self-stretch bg-stone-400 inline-flex flex-col justify-start items-start overflow-hidden">
-
             <div class="self-stretch flex flex-row justify-between h-24 pl-7 pr-14 py-7 bg-gray-300">
-
                 <x-UI_components.go_back/>
             </div>
 
@@ -19,7 +16,7 @@
                         <div class="mb-2"><span class="font-bold">Páginas:</span> {{ $bookUser->book->pages }}</div>
                         <div class="mb-2"><span class="font-bold">ISBN-10:</span> {{ $bookUser->book->isbn }}</div>
                         <div class="mb-2"><span class="font-bold">Sinopsis:</span> {{ $bookUser->book->summary }}</div>
-                        <form method="POST" action="{{ route('bookUser.update', $bookUser) }}">
+                        <form method="POST" action="{{ route('bookUser.update', $bookUser) }}"> 
                             @csrf
                             @method('PUT')
 
@@ -49,7 +46,11 @@
                             
                             <div>
                                 <label for="comment" class="font-bold">Notas:</label>
-                                <input type="text" name="comment" value="{{ $bookUser->comment }}" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-gray-900 "> 
+                                <input 
+                                    type="text" 
+                                    name="comment" 
+                                    value="{{ $bookUser->comment }}" 
+                                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-gray-900 "> 
                             </div>
 
                             <div>
