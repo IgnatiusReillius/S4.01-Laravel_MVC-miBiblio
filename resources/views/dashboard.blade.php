@@ -1,3 +1,4 @@
+<x-UI_components.message/>
 <x-book.buttons.book_search_button/>
 <x-book.buttons.book_create_button/>
 <x-app-layout>

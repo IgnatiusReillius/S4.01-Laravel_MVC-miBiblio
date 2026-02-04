@@ -1,6 +1,7 @@
 <x-UI_components.message/>
 <x-bookUser.book_user_edit :bookUser="$bookUser"/>
 <x-bookUser.book_user_delete :bookUser="$bookUser"/>
+<x-book.buttons.book_delete_button :bookUser="$bookUser"/>
 <x-book.buttons.book_edit_button :bookUser="$bookUser"/>
 <x-app-layout>
     <div class="h-screen w-screen inline-flex justify-start items-start overflow-hidden" >

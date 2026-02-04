@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+
     public function store(Request $request) {
         
         $request->validate([
@@ -117,5 +118,26 @@ class BookController extends Controller
 
         return redirect()->route('bookUser.show', $bookUser)
             ->with('success', 'Libro editado correctamente.');
+    }
+
+    public function destroy(Book $book) {
+
+        $otherUsersCount = $book->bookUser()
+                                ->where('user_id', '!=', auth()->id())
+                                ->count();
+        
+        if ($otherUsersCount > 0) {
+            return redirect()->route('dashboard')
+                ->with('error', 'No se puede eliminar este libro porque otros usuarios tienen reseñas del mismo.');
+        }
+        
+        $book->bookUser()
+            ->where('user_id', auth()->id())
+            ->delete();
+        
+        $book->delete();
+        
+        return redirect()->route('dashboard')
+            ->with('success', 'Libro eliminado correctamente de la base de datos.');
     }
 }

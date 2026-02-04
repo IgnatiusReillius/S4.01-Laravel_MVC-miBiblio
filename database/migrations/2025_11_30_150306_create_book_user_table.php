@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('book_user', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('book_id')->index('book_user_book_id_foreign');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->date('add_date')->nullable();
             $table->date('read_date')->nullable();
             $table->text('comment')->nullable();
