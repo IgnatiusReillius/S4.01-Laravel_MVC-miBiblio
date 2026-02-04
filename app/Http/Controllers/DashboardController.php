@@ -113,7 +113,8 @@ class DashboardController extends Controller
         }
 
         $booksUser = $query->select('book_user.*')->get();
+        $books = $query->select('books.*')->get();
 
-        return view('dashboard', compact('booksUser', 'order', 'category', 'authors', 'publishers', 'ratings', 'states'));
+        return view('dashboard', compact('books', 'booksUser', 'order', 'category', 'authors', 'publishers', 'ratings', 'states'));
     }
 }

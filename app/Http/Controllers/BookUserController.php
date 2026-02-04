@@ -10,14 +10,6 @@ use Illuminate\Support\Facades\Auth;
 class BookUserController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
     public function create()
@@ -46,7 +38,8 @@ class BookUserController extends Controller
 
         return redirect()->route('dashboard', [
             'category' => $request->property == 1 ? 'owned' : 'wishlist'
-        ]);
+        ])
+            ->with('success', 'Reseña agregada correctamente a tu librería.');
     }
 
     /**
@@ -84,7 +77,8 @@ class BookUserController extends Controller
             'property'  => $request->boolean('property'),
             'rating'    => $request->rating,
         ]);
-        return view('book.book', ['book' => $bookUser->book, 'bookUser' => $bookUser]);
+        return view('book.book', ['book' => $bookUser->book, 'bookUser' => $bookUser])
+            ->with('success', 'Reseña actualizada correctamente.');
     }
 
     /**
@@ -95,7 +89,7 @@ class BookUserController extends Controller
         $bookUser->delete();
 
         return redirect()->route('dashboard')
-        ->with('success', 'Libro eliminado correctamente de tu biblioteca.');
+        ->with('success', 'Reseña eliminada correctamente de tu biblioteca.');
     }
 
 }

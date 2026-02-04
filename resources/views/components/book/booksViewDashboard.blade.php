@@ -1,4 +1,4 @@
-@props(['booksUser'])
+@props(['books', 'booksUser'])
 @if($booksUser->isEmpty())
     <div class="w-full h-full px-7 pt-5">
         <div class="font-bold top-1/2 left-1/2">No tienes libros en tu biblioteca, empieza por añadir algunos aquí</div>
@@ -8,7 +8,7 @@
         {{-- lista --}}
         <div class="view_wrap list-view" style="flex-direction: column; gap: 10px; display: flex">
             @foreach ($booksUser as $bookUser)
-                <a href="{{ route('bookUser.show', $bookUser) }}">
+                <a href="{{ route('bookUser.show', [$bookUser]) }}">
                     <div>
                         <span class="font-bold">"{{ $bookUser->book->title }}"</span>, 
                         escrito por <span class="font-bold">{{ $bookUser->book->author }}</span>, 
@@ -22,7 +22,7 @@
         {{-- detallada --}}
         <div class="view_wrap list-detailed-view flex-col gap-2" style="display: none;">
             @foreach ($booksUser as $bookUser)
-                <a href="{{ route('bookUser.show', $bookUser) }}">
+                <a href="{{ route('bookUser.show', [$bookUser]) }}">
                     <div class="flex flex-row">
                         <x-book.book_cover :bookUser="$bookUser" size="small"/>
                         <div class="ml-3">
@@ -41,7 +41,7 @@
         {{-- pequeña --}}
         <div class="view_wrap grid-small-view gap-1" style="display: none;">
             @foreach ($booksUser as $bookUser)
-                <a href="{{ route('bookUser.show', $bookUser) }}">
+                <a href="{{ route('bookUser.show', [$bookUser]) }}">
                     <x-book.book_cover :bookUser="$bookUser" size="medium"/>
                 </a>
             @endforeach
@@ -49,7 +49,7 @@
         {{-- grande --}}
         <div class="view_wrap grid-big-view gap-2 " style="display: none;">
             @foreach ($booksUser as $bookUser)
-                <a href="{{ route('bookUser.show', $bookUser) }}">
+                <a href="{{ route('bookUser.show', [$bookUser]) }}">
                     <x-book.book_cover :bookUser="$bookUser"  size="large"/>
                 </a>
             @endforeach
