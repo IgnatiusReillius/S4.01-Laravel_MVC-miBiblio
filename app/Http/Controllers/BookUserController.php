@@ -67,7 +67,8 @@ class BookUserController extends Controller
     public function edit(BookUser $bookUser)
     {
         
-        return view('Book.bookUser_edit', ['book' => $bookUser->book, 'bookUser' => $bookUser]);
+        return view('Book.bookUser_edit', ['book' => $bookUser->book, 'bookUser' => $bookUser])
+            ->with('success', 'Reseña agregada correctamente a tu librería.');
     }
 
     /**

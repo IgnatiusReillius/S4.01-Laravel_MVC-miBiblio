@@ -68,4 +68,54 @@ class BookController extends Controller
             'userBooks' => $userBookIds
         ]);
     }
+
+    public function edit(BookUser $bookUser) {
+
+        return view('Book.book_edit', ['book' => $bookUser->book, 'bookUser' => $bookUser]);
+    }
+
+    public function update(Request $request, Book $book) {
+        
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'publisher' => 'nullable|string|max:255',
+            'publish_date' => 'nullable|date',
+            'pages' => 'nullable|integer|min:1',
+            'isbn' => 'required|string|max:20',
+            'summary' => 'nullable|string|max:1000',
+            'cover_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
+        ]);
+
+        $data = [
+            'title' => $request->title,
+            'author' => $request->author,
+            'publisher' => $request->publisher,
+            'publish_date' => $request->publish_date,
+            'pages' => $request->pages,
+            'isbn' => $request->isbn,
+            'summary' => $request->summary,
+        ];
+
+        if ($request->hasFile('cover_path')) {
+            if ($book->cover_path && file_exists(public_path($book->cover_path))) {
+                unlink(public_path($book->cover_path));
+            }
+
+            $file = $request->file('cover_path');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $filename);
+
+            $data['cover_path'] = 'images/' . $filename;
+        }
+
+        $book->update($data);
+
+        $bookUser = $book->bookUser()
+            ->where('user_id', auth()->id())
+            ->first();
+
+        return redirect()->route('bookUser.show', $bookUser)
+            ->with('success', 'Libro editado correctamente.');
+    }
 }

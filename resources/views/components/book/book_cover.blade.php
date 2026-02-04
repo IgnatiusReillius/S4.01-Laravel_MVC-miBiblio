@@ -10,7 +10,7 @@
     };
 @endphp
 
-@if($bookUser->book->cover_path)
+@if(isset($bookUser->book->cover_path))
     <img class="{{ $classes }} object-contain self-start" src="{{ asset($bookUser->book->cover_path) }}" />
 @else
     <img class="size-12 itmes-center" src="{{ asset('images/icon_no_image.svg')}}" />

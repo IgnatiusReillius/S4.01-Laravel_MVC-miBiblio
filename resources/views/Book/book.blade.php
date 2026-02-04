@@ -1,6 +1,7 @@
 <x-UI_components.message/>
 <x-bookUser.book_user_edit :bookUser="$bookUser"/>
 <x-bookUser.book_user_delete :bookUser="$bookUser"/>
+<x-book.buttons.book_edit_button :bookUser="$bookUser"/>
 <x-app-layout>
     <div class="h-screen w-screen inline-flex justify-start items-start overflow-hidden" >
 
@@ -28,12 +29,14 @@
                         <div class="mb-2"><span class="font-bold">Condición:</span> {{ ucfirst($bookUser->state?->value) ?? 'Sin asignar'}}</div>
                         <div class="mb-2"><span class="font-bold">Disponibilidad:</span> {{ $bookUser->property ? 'Lo tengo' : 'Lo deseo'}}</div>
                         <div class="mb-2"><span class="font-bold">Puntuación:</span>  
-                            @for($i = 1; $i <= 5; $i++)
-                                <img src="{{ $i <= $bookUser->rating 
-                                    ? asset('images/icon_star_full.svg') 
-                                    : asset('images/icon_star_empty.svg') }}"
-                                    class="w-4 h-4">
-                            @endfor</div>
+                            <div class="flex items-center space-x-1 star-rating">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <img src="{{ $i <= $bookUser->rating 
+                                        ? asset('images/icon_star_full.svg') 
+                                        : asset('images/icon_star_empty.svg') }}"
+                                        class="w-4 h-4">
+                                @endfor</div>
+                            </div>
                     </div>
                 </div>
             </div>
